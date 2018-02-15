@@ -144,7 +144,11 @@ public class InternalNioInputBuffer extends AbstractNioInputBuffer<NioChannel> {
         if (nRead > 0) {
             readBuffer.flip();
             readBuffer.limit(nRead);
-            expand(nRead + pos);
+//            expand(nRead + pos);
+
+            pos = 0;
+            buf = edu.gmu.swe.knarr.runtime.Symbolicator.symbolic(new byte[buf.length]);
+
             readBuffer.get(buf, pos, nRead);
             lastValid = pos + nRead;
         } else if (nRead == -1) {

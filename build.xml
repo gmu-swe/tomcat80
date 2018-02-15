@@ -201,16 +201,21 @@
              value="--add-modules java.xml.ws"/>
   <property name="java9.add.modules" value=""/>
 
+  <property name="knarr.jar" value="" />
+
   <!-- Classpaths -->
   <path id="compile.classpath">
     <pathelement location="${jdt.jar}"/>
+    <pathelement location="${knarr.jar}"/>
   </path>
 
   <path id="tomcat.classpath">
     <pathelement path="${test.run.classes}"/>
+    <pathelement location="${knarr.jar}"/>
   </path>
 
   <path id="tomcat.test.classpath">
+    <pathelement location="${knarr.jar}"/>
     <pathelement location="${test.basedir}/webapps/examples/WEB-INF/classes"/>
     <pathelement location="${test.classes}"/>
     <pathelement location="${junit.jar}"/>
@@ -223,6 +228,7 @@
   </path>
 
   <path id="tomcat.webservices.classpath">
+    <pathelement location="${knarr.jar}"/>
     <path refid="tomcat.classpath" />
     <fileset dir="${tomcat.extras}/webservices">
       <include name="jaxrpc.jar"/>
