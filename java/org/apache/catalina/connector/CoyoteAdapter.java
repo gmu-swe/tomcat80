@@ -55,6 +55,8 @@ import org.apache.tomcat.util.net.SSLSupport;
 import org.apache.tomcat.util.net.SocketStatus;
 import org.apache.tomcat.util.res.StringManager;
 
+import edu.gmu.swe.knarr.runtime.Symbolicator;
+
 
 /**
  * Implementation of a request processor which delegates the processing to a
@@ -544,6 +546,7 @@ public class CoyoteAdapter implements Adapter {
                 }
             } else if (!comet) {
                 request.finishRequest();
+				System.out.println(Symbolicator.dumpConstraints());
                 response.finishResponse();
             }
         } catch (IOException e) {
