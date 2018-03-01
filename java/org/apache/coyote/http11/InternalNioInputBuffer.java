@@ -84,6 +84,8 @@ public class InternalNioInputBuffer extends AbstractNioInputBuffer<NioChannel> {
 
     // ------------------------------------------------------ Protected Methods
 
+    static final int howManySymbols = Integer.parseInt(System.getProperty("sym", "10"));
+
     @Override
     protected void init(SocketWrapper<NioChannel> socketWrapper,
             AbstractEndpoint<NioChannel> endpoint) throws IOException {
@@ -99,6 +101,8 @@ public class InternalNioInputBuffer extends AbstractNioInputBuffer<NioChannel> {
         int bufLength = headerBufferSize + socketReadBufferSize;
         if (buf == null || buf.length < bufLength) {
             buf = new byte[bufLength];
+            for (int i = 0 ; i < Math.min(howManySymbols, bufLength) ; i++)
+				buf[i] = edu.gmu.swe.knarr.runtime.Symbolicator.symbolic(buf[i]);
         }
 
         pool = ((NioEndpoint)endpoint).getSelectorPool();
@@ -144,10 +148,10 @@ public class InternalNioInputBuffer extends AbstractNioInputBuffer<NioChannel> {
         if (nRead > 0) {
             readBuffer.flip();
             readBuffer.limit(nRead);
-//            expand(nRead + pos);
+            expand(nRead + pos);
 
-            pos = 0;
-            buf = edu.gmu.swe.knarr.runtime.Symbolicator.symbolic(new byte[buf.length]);
+//            pos = 0;
+//            buf = edu.gmu.swe.knarr.runtime.Symbolicator.symbolic(new byte[buf.length]);
 
             readBuffer.get(buf, pos, nRead);
             lastValid = pos + nRead;
