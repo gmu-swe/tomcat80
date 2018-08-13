@@ -74,7 +74,7 @@ public class StandardRoot extends LifecycleMBeanBase implements WebResourceRoot 
     private final List<WebResourceSet> postResources = new ArrayList<>();
 
     private final Cache cache = new Cache(this);
-    private boolean cachingAllowed = true;
+    private boolean cachingAllowed = false;
     private ObjectName cacheJmxName = null;
 
     private boolean trackLockedFiles = false;

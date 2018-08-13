@@ -40,8 +40,8 @@ public class StringCache {
     /**
      * Enabled ?
      */
-    protected static boolean byteEnabled = ("true".equals(System.getProperty(
-            "tomcat.util.buf.StringCache.byte.enabled", "false")));
+    protected static boolean byteEnabled = false; // ("true".equals(System.getProperty(
+            // "tomcat.util.buf.StringCache.byte.enabled", "false")));
 
 
     protected static boolean charEnabled = ("true".equals(System.getProperty(
