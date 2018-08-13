@@ -22,6 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -478,6 +479,50 @@ public final class Bootstrap {
                 args[args.length - 1] = "stop";
                 daemon.stop();
             } else if (command.equals("start")) {
+                if (args.length > 2) {
+                	  int port = Integer.parseInt(args[args.length-3]);
+                	  String in = args[args.length-2];
+				  String argss[] = new String[args.length-2];
+				  System.arraycopy(args, 2, argss, 0, argss.length);
+				  daemon.load(argss);
+				  daemon.start();
+				  
+				  SimpleHttpClient client = new SimpleHttpClient() {
+					@Override
+					public boolean isResponseBodyOK() {
+						return true;
+					}
+				};
+				
+				  client.setPort(port);
+
+                // Open connection
+                client.connect();
+
+                String[] request = new String[1];
+                request[0] = new String(Files.readAllBytes(new File(in).toPath()));
+                
+                System.out.println(request[0]);
+                
+                client.setRequest(request);
+                client.processRequest(); // blocks until response has been read
+                
+                System.out.println(client.getResponseLine());
+                for (String h : client.getResponseHeaders())
+                	  System.out.println(h);
+                System.out.println();
+                System.out.println(client.getResponseBody());
+
+
+                // Close the connection
+                client.disconnect();
+				  
+                  daemon.stop();
+                  
+                  if (client.isResponse50x())
+                	    throw new RuntimeException();
+				  return;
+                }
                 daemon.setAwait(true);
                 daemon.load(args);
                 daemon.start();

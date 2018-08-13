@@ -336,6 +336,7 @@
   <!-- between files.catalina and files.bootstrap.                           -->
   <patternset id="files.bootstrap">
     <include name="org/apache/catalina/startup/Bootstrap.*" />
+    <include name="org/apache/catalina/startup/Bootstrap$1.*" />
     <include name="org/apache/catalina/startup/catalina.properties" />
     <include name="org/apache/catalina/startup/CatalinaProperties.*" />
     <include name="org/apache/catalina/startup/ClassLoaderFactory.*" />
@@ -344,6 +345,7 @@
     <include name="org/apache/catalina/startup/SafeForkJoinWorkerThreadFactory$*.*" />
     <include name="org/apache/catalina/startup/Tool.*" />
     <include name="org/apache/catalina/security/SecurityClassLoad.*" />
+    <include name="org/apache/catalina/startup/SimpleHttpClient.*" />
     <include name="org/apache/catalina/webresources/war/**" />
     <include name="org/apache/tomcat/util/buf/UriUtil.*" />
   </patternset>
