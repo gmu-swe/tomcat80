@@ -381,7 +381,8 @@ elif [ "$1" = "run" ]; then
       -Dcatalina.base="\"$CATALINA_BASE\"" \
       -Dcatalina.home="\"$CATALINA_HOME\"" \
       -Djava.io.tmpdir="\"$CATALINA_TMPDIR\"" \
-      org.apache.catalina.startup.Bootstrap "$@" start
+      edu.cmu.sv.kelinci.Kelinci \
+      org.apache.catalina.startup.Bootstrap 8080 @@ start
   else
     eval exec "\"$_RUNJAVA\"" "\"$LOGGING_CONFIG\"" $LOGGING_MANAGER $JAVA_OPTS $CATALINA_OPTS \
       -D$ENDORSED_PROP="\"$JAVA_ENDORSED_DIRS\"" \
@@ -389,7 +390,8 @@ elif [ "$1" = "run" ]; then
       -Dcatalina.base="\"$CATALINA_BASE\"" \
       -Dcatalina.home="\"$CATALINA_HOME\"" \
       -Djava.io.tmpdir="\"$CATALINA_TMPDIR\"" \
-      org.apache.catalina.startup.Bootstrap "$@" start
+      edu.cmu.sv.kelinci.Kelinci \
+      org.apache.catalina.startup.Bootstrap 8080 @@ start
   fi
 
 elif [ "$1" = "start" ] ; then

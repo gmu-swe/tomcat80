@@ -144,13 +144,16 @@ public final class Bootstrap {
 
     private void initClassLoaders() {
         try {
-            commonLoader = createClassLoader("common", null);
-            if( commonLoader == null ) {
-                // no config file, default to this loader - we might be in a 'single' env.
                 commonLoader=this.getClass().getClassLoader();
-            }
-            catalinaLoader = createClassLoader("server", commonLoader);
-            sharedLoader = createClassLoader("shared", commonLoader);
+           // commonLoader = createClassLoader("common", null);
+           // if( commonLoader == null ) {
+           //     // no config file, default to this loader - we might be in a 'single' env.
+           //     commonLoader=this.getClass().getClassLoader();
+           // }
+           // catalinaLoader = createClassLoader("server", commonLoader);
+           // sharedLoader = createClassLoader("shared", commonLoader);
+           catalinaLoader = commonLoader;
+           sharedLoader = commonLoader;
         } catch (Throwable t) {
             handleThrowable(t);
             log.error("Class loader creation threw exception", t);
@@ -439,13 +442,15 @@ public final class Bootstrap {
     }
 
 
+    private static boolean hasStarted = false;
+
     /**
      * Main method and entry point when starting Tomcat via the provided
      * scripts.
      *
      * @param args Command line arguments to be processed
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Throwable {
 
         if (daemon == null) {
             // Don't set daemon until init() has completed
@@ -462,7 +467,7 @@ public final class Bootstrap {
             // When running as a service the call to stop will be on a new
             // thread so make sure the correct class loader is used to prevent
             // a range of class not found exceptions.
-            Thread.currentThread().setContextClassLoader(daemon.catalinaLoader);
+            // Thread.currentThread().setContextClassLoader(daemon.catalinaLoader);
         }
 
         try {
@@ -482,10 +487,17 @@ public final class Bootstrap {
                 if (args.length > 2) {
                 	  int port = Integer.parseInt(args[args.length-3]);
                 	  String in = args[args.length-2];
-				  String argss[] = new String[args.length-2];
-				  System.arraycopy(args, 2, argss, 0, argss.length);
-				  daemon.load(argss);
-				  daemon.start();
+
+                  if (!hasStarted) {
+				      String argss[] = new String[args.length-2];
+				      System.arraycopy(args, 2, argss, 0, argss.length);
+				      daemon.load(argss);
+				      daemon.start();
+				      hasStarted = true;
+                      System.out.println("Started now");
+                  } else {
+                      System.out.println("Started before");
+                  }
 				  
 				  SimpleHttpClient client = new SimpleHttpClient() {
 					@Override
@@ -517,15 +529,17 @@ public final class Bootstrap {
                 // Close the connection
                 client.disconnect();
 				  
-                  daemon.stop();
+                  // daemon.stop();
+                  // daemon = null;
                   
-                  if (client.isResponse50x())
-                	    throw new RuntimeException();
-				  return;
-                }
+                //  if (client.isResponse500())
+                //	    throw new RuntimeException();
+                  return;
+                } else {
                 daemon.setAwait(true);
                 daemon.load(args);
                 daemon.start();
+                }
             } else if (command.equals("stop")) {
                 daemon.stopServer(args);
             } else if (command.equals("configtest")) {
@@ -538,14 +552,14 @@ public final class Bootstrap {
                 log.warn("Bootstrap: command \"" + command + "\" does not exist.");
             }
         } catch (Throwable t) {
-            // Unwrap the Exception for clearer error reporting
-            if (t instanceof InvocationTargetException &&
-                    t.getCause() != null) {
-                t = t.getCause();
-            }
-            handleThrowable(t);
+//            // Unwrap the Exception for clearer error reporting
+//            if (t instanceof InvocationTargetException &&
+//                    t.getCause() != null) {
+//                t = t.getCause();
+//            }
+//            handleThrowable(t);
             t.printStackTrace();
-            System.exit(1);
+//            System.exit(1);
         }
 
     }
