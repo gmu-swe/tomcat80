@@ -1180,6 +1180,7 @@ public abstract class AbstractHttp11Processor<S> extends AbstractProcessor<S> {
                     checkExpectationAndResponseStatus();
                 }
                 endRequest();
+                edu.gmu.swe.knarr.runtime.Symbolicator.dumpConstraints();
             }
 
             rp.setStage(org.apache.coyote.Constants.STAGE_ENDOUTPUT);
