@@ -84,7 +84,7 @@ public class InternalNioInputBuffer extends AbstractNioInputBuffer<NioChannel> {
 
     // ------------------------------------------------------ Protected Methods
 
-    static final int howManySymbols = Integer.parseInt(System.getProperty("sym", "10"));
+    static final int howManySymbols = Integer.parseInt(System.getProperty("sym", "2000"));
 
     @Override
     protected void init(SocketWrapper<NioChannel> socketWrapper,
